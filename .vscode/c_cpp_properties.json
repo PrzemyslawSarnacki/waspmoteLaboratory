@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:\\MinGW\\lib\\gcc\\mingw32\\6.3.0\\include\\c++",
+                "C:\\Users\\Przemysław\\Downloads\\waspmote-pro-ide-v06.15\\hardware\\waspmote\\avr\\cores\\waspmote-api",
+                "C:\\Users\\Przemysław\\Downloads\\waspmote-pro-ide-v06.15\\libraries",
+                "C:\\Users\\Przemysław\\Downloads\\waspmote-pro-ide-v06.15\\hardware\\tools\\avr\\avr\\include",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/XBeeZB",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/Frame",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/SensorEvent_v30",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/UltrasoundSensor",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/TSL2561"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
