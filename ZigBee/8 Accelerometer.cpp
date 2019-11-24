@@ -3,8 +3,8 @@
 
 // Redundant libs
 #include <WaspPWR.h>
-#include <WaspACC.h>
 #include <WaspRTC.h>
+#include <WaspACC.h>
 #include <WaspUtils.h>
 #include <stdio.h>
 
@@ -25,6 +25,7 @@ char RX_ADDRESS[] = "0013A20040F698CA"; //odczytać w XCTU (kolumna z lewej stro
 
 void logToFile(char data[], uint8_t c);
 uint8_t sendMeasurement(float measurement, char descr[], char unit[]);
+void checkNetworkParams();
 
 void setup()
 {
@@ -36,6 +37,8 @@ void setup()
   ACC.ON();
 
   delay(3000);
+  checkNetworkParams();
+
 }
 
 void loop()
@@ -94,4 +97,62 @@ uint8_t sendMeasurement(float measurement, char descr[], char unit[])
   sprintf(endData, "%s%s%s", descr, number3, unit );
   uint8_t flag = xbeeZB.send(RX_ADDRESS, endData);
   return flag;
+}
+
+void checkNetworkParams()
+{
+  // 1. get operating 64-b PAN ID
+  xbeeZB.getOperating64PAN();
+
+  // 2. wait for association indication
+  xbeeZB.getAssociationIndication();
+ 
+  while( xbeeZB.associationIndication != 0 )
+  { 
+    delay(2000);
+    
+    // get operating 64-b PAN ID
+    xbeeZB.getOperating64PAN();
+
+    USB.print(F("operating 64-b PAN ID: "));
+    USB.printHex(xbeeZB.operating64PAN[0]);
+    USB.printHex(xbeeZB.operating64PAN[1]);
+    USB.printHex(xbeeZB.operating64PAN[2]);
+    USB.printHex(xbeeZB.operating64PAN[3]);
+    USB.printHex(xbeeZB.operating64PAN[4]);
+    USB.printHex(xbeeZB.operating64PAN[5]);
+    USB.printHex(xbeeZB.operating64PAN[6]);
+    USB.printHex(xbeeZB.operating64PAN[7]);
+    USB.println();     
+    
+    xbeeZB.getAssociationIndication();
+  }
+
+  USB.println(F("\nJoined a network!"));
+
+  // 3. get network parameters 
+  xbeeZB.getOperating16PAN();
+  xbeeZB.getOperating64PAN();
+  xbeeZB.getChannel();
+
+  USB.print(F("operating 16-b PAN ID: "));
+  USB.printHex(xbeeZB.operating16PAN[0]);
+  USB.printHex(xbeeZB.operating16PAN[1]);
+  USB.println();
+
+  USB.print(F("operating 64-b PAN ID: "));
+  USB.printHex(xbeeZB.operating64PAN[0]);
+  USB.printHex(xbeeZB.operating64PAN[1]);
+  USB.printHex(xbeeZB.operating64PAN[2]);
+  USB.printHex(xbeeZB.operating64PAN[3]);
+  USB.printHex(xbeeZB.operating64PAN[4]);
+  USB.printHex(xbeeZB.operating64PAN[5]);
+  USB.printHex(xbeeZB.operating64PAN[6]);
+  USB.printHex(xbeeZB.operating64PAN[7]);
+  USB.println();
+
+  USB.print(F("channel: "));
+  USB.printHex(xbeeZB.channel);
+  USB.println();
+
 }
