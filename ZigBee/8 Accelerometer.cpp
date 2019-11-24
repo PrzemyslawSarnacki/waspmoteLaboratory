@@ -8,10 +8,6 @@
 #include <WaspUtils.h>
 #include <stdio.h>
 
-float temp;
-float humd;
-float pres;
-float bat;
 uint8_t error;
 uint8_t status;
 int x_acc;
@@ -46,8 +42,6 @@ void loop()
   // send XBee packet
   error = xbeeZB.send( RX_ADDRESS, node_ID);
   error = xbeeZB.send( RX_ADDRESS, "Its Working !!!");
-  bat = PWR.getBatteryLevel();
-  error = sendMeasurement(bat, "BT:", "%");
   status = ACC.check();
   error = sendMeasurement(status, "AS:", "");
 
