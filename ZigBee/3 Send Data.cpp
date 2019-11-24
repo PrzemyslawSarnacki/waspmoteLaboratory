@@ -17,39 +17,18 @@ uint8_t  PANID[8] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88};
 // Adres MAC bramy
 char RX_ADDRESS[] = "0013A20040F698CA"; //odczytać w XCTU (kolumna z lewej strony)
 
-
-uint8_t sendMeasurement(float measurement, char descr[], char unit[])
-{
-  char endData[52];
-  char number3[10];
-  Utils.float2String (measurement, number3, 2);
-  USB.println(number3);
-  //char data2[] = "Temperatura:";
-  sprintf(endData, "%s%s%s", descr, number3, unit );
-  uint8_t flag = xbeeZB.send(RX_ADDRESS, endData);
-  return flag;
-}
+void logToFile(char data[],uint8_t c);
+uint8_t sendMeasurement(float measurement, char descr[], char unit[]);
 
 void setup() 
 {
-  // Włączenie USB
-  USB.ON();
-  USB.println(F("Rozpocznij program"));
-   xbeeZB.setPAN(PANID);
-
-  // check at command flag
-  if (xbeeZB.error_AT == 0)
-  {
-    USB.println(F("2. PANID set OK"));
-  }
-  else
-  {
-    USB.println(F("2. Error while setting PANID"));
-  }
-  
-  // Uruchomienie tablicy czujnika
-  Events.ON(); 
-  delay(3000);
+    // Włączenie USB
+    USB.ON();
+    USB.println(F("Rozpocznij program"));
+    xbeeZB.ON();
+    // Uruchomienie tablicy czujnika
+    Events.ON(); 
+    delay(3000);
 }
 
 void loop()
@@ -81,4 +60,16 @@ void loop()
 
   // wait for five seconds
   delay(5000);
+}
+
+uint8_t sendMeasurement(float measurement, char descr[], char unit[])
+{
+  char endData[52];
+  char number3[10];
+  Utils.float2String (measurement, number3, 2);
+  USB.println(number3);
+  //char data2[] = "Temperatura:";
+  sprintf(endData, "%s%s%s", descr, number3, unit );
+  uint8_t flag = xbeeZB.send(RX_ADDRESS, endData);
+  return flag;
 }

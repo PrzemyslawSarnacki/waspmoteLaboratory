@@ -33,7 +33,7 @@
 
 // Destination MAC address
 //////////////////////////////////////////
-char RX_ADDRESS[] = "0013A200403A2A49";
+char RX_ADDRESS[] = "0013A20040F698CA";
 //////////////////////////////////////////
 
 // Define the Waspmote ID
@@ -43,7 +43,7 @@ char WASPMOTE_ID[] = "node_01";
 // define variable
 uint8_t error;
 
-
+void checkNetworkParams();
 
 void setup()
 {
