@@ -13,7 +13,8 @@
                 "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/SensorEvent_v30",
                 "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/UltrasoundSensor",
                 "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/TSL2561",
-                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/WaspAES"
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/WaspAES",
+                "C:/Users/Przemysław/Downloads/waspmote-pro-ide-v06.15/libraries/BLE"
             ],
             "defines": [
                 "_DEBUG",

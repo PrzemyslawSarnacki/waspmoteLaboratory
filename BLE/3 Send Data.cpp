@@ -29,6 +29,7 @@
  */
 
 #include <WaspBLE.h>
+#include <WaspSensorEvent_v30.h>
 // Redundant libs
 #include <WaspUtils.h>
 #include <WaspPWR.h>
@@ -40,7 +41,7 @@
 #include <WaspConstants.h>
 
 void setName();
-uint8_t sendMeasure(float measure, char descr[], char unit[]);
+uint8_t sendMeasurement(float measure, char descr[], char unit[]);
 
 // Auxiliary variable
 uint8_t flag = 0;
@@ -129,7 +130,16 @@ void loop()
           { 
             // 4.4.1 Write the local attribute which is indicated
             flag = BLE.writeLocalAttribute(handler, "Hello World");
-
+            flag = sendMeasurement(PWR.getBatteryLevel, "Bateria:", "%");
+            float bat = PWR.getBatteryLevel();
+            flag = sendMeasurement(bat, "BT:", "%");
+            float temp = Events.getTemperature();
+            flag = sendMeasurement(temp, "TC:", "C");
+            float humd = Events.getHumidity();
+            flag = sendMeasurement(humd, "WP:", "%");
+            float pres = Events.getPressure();
+            flag = sendMeasurement(pres, "CP:", "Pa");
+            
             if (flag == 0)
             {
               USB.print(a, DEC);
@@ -235,7 +245,7 @@ void setName()
   delay(1000);
 }
 
-uint8_t sendMeasure(float measure, char descr[], char unit[])
+uint8_t sendMeasurement(float measure, char descr[], char unit[])
 {
   uint16_t handler = 44;
   char buffer1[52];
