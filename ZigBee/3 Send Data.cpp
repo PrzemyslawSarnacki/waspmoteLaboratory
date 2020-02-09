@@ -34,14 +34,20 @@ void loop()
 {
   // send XBee packet
   error = xbeeZB.send( RX_ADDRESS, node_ID);   
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   error = xbeeZB.send( RX_ADDRESS, "Its Working !!!");   
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   bat = PWR.getBatteryLevel();
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   error = sendMeasurement(bat, "BT:", "%");
   temp = Events.getTemperature();
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   error = sendMeasurement(temp, "TC:", "C");
   humd = Events.getHumidity();
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   error = sendMeasurement(humd, "WP:", "%");
   pres = Events.getPressure();
+  error = xbeeZB.send(RX_ADDRESS,"\n");
   error = sendMeasurement(pres, "CP:", "Pa");
   
   // check TX flag
@@ -68,11 +74,10 @@ void loop()
 uint8_t sendMeasurement(float measurement, char descr[], char unit[])
 {
   char endData[52];
-  char number3[10];
-  Utils.float2String (measurement, number3, 2);
-  USB.println(number3);
-  //char data2[] = "Temperatura:";
-  sprintf(endData, "%s%s%s", descr, number3, unit );
+  char number_var[10];
+  Utils.float2String (measurement, number_var, 2);
+  USB.println(number_var);
+  sprintf(endData, "%s%s%s", descr, number_var, unit );
   uint8_t flag = xbeeZB.send(RX_ADDRESS, endData);
   return flag;
 }

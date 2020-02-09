@@ -71,6 +71,7 @@ void loop()
   bat = PWR.getBatteryLevel();
   float volt = PWR.getBatteryLevel();
   error = sendMeasurement(volt, "VOLTY:", "V");
+  logToFile("\n");
     //  error = sendMeasurement(temp, "TC:", "C");
     //  error = sendMeasurement(humd, "WP:", "%");
     //  error = sendMeasurement(pres, "CP:", "Pa");
@@ -129,10 +130,9 @@ void checkNetworkParams()
   }
 
 }
-void logToFile(char data[],uint8_t c)
+void logToFile(char data[])
 {
     char buffer2[52];
-    strcpy(buffer2, &(data[c]));
     sd_answer = SD.writeSD(filename, buffer2, counter);
     counter += (int)(strlen(buffer2));
     USB.print(counter, DEC);
@@ -162,7 +162,7 @@ uint8_t sendMeasurement(float measurement, char descr[], char unit[])
   sprintf(endData, "%s%s%s", descr, number3, unit );
   char logData[52];
   sprintf(logData, "%s%s;", descr, number3);
-  logToFile(logData, strlen(descr));
+  logToFile(logData);
   
   uint8_t flag = xbeeZB.send(RX_ADDRESS, endData);
   

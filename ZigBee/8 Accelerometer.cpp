@@ -47,16 +47,19 @@ void loop()
 
   //----------X Value-----------------------
   x_acc = ACC.getX();
+  USB.print(x_acc, DEC);
 
   error = sendMeasurement(x_acc, "AX:", "");
 
   //----------Y Value-----------------------
   y_acc = ACC.getY();
+  USB.print(y_acc, DEC);
 
   error = sendMeasurement(y_acc, "AY:", "");
 
   //----------Z Value-----------------------
   z_acc = ACC.getZ();
+  USB.print(z_acc, DEC);
 
   error = sendMeasurement(z_acc, "AZ:", "");
 
@@ -76,6 +79,16 @@ void loop()
     // blink red LED
     Utils.blinkRedLED();
   }
+
+  USB.print(F("\n------------------------------\nCheck: 0x")); 
+  USB.println(status, HEX);
+  USB.println(F("\n \t0X\t0Y\t0Z")); 
+  USB.print(F(" ACC\t")); 
+  USB.print(x_acc, DEC);
+  USB.print(F("\t")); 
+  USB.print(y_acc, DEC);
+  USB.print(F("\t")); 
+  USB.println(z_acc, DEC);
 
   // wait for five seconds
   delay(5000);

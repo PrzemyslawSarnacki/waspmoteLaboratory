@@ -37,24 +37,53 @@
 #include <WaspUSB.h>
 #include <WaspUtils.h>
 #include <stdio.h>
+#include <string.h>
 #include <wiring.h>
 #include <WaspConstants.h>
+#include <WaspSD.h>
+
+char filename[] = "File2.TXT";
+uint8_t sd_answer;
+int counter = 0;
 
 void setName();
 uint8_t sendMeasurement(float measure, char descr[], char unit[]);
+void logToFile(char data[],uint8_t c);
+
 
 // Auxiliary variable
 uint8_t flag = 0;
 
 void setup() 
 {  
+  USB.ON();
   USB.println(F("BLE_11 Example"));  
 
   // 0. Turn BLE module ON
   BLE.ON(SOCKET0);
+  SD.ON();
+    // Delete file
+    sd_answer = SD.del(filename);
+    if ( sd_answer == 1 )
+    {
+      USB.println(F("file deleted"));
+    }
+    else
+    {
+        USB.println(F("file NOT deleted"));
+    }
+    // Create file
+    sd_answer = SD.create(filename);
+    if ( sd_answer == 1 )
+    {
+        USB.println(F("file created"));
+    }
+    else
+    {
+        USB.println(F("file NOT created"));
+ }
 
 }
-
 
 void loop() 
 {
@@ -130,6 +159,7 @@ void loop()
           { 
             // 4.4.1 Write the local attribute which is indicated
             flag = BLE.writeLocalAttribute(handler, "Hello World");
+            flag = sendMeasurement(PWR.getBatteryLevel, "Bateria:", "%");
             float bat = PWR.getBatteryLevel();
             flag = sendMeasurement(bat, "BT:", "%");
             float temp = Events.getTemperature();
@@ -243,6 +273,24 @@ void setName()
   USB.println();
   delay(1000);
 }
+
+void logToFile(char data[])
+{
+    char buffer2[52];
+    sd_answer = SD.writeSD(filename, buffer2, counter);
+    counter += (int)(strlen(buffer2));
+    USB.print(counter, DEC);
+    if ( sd_answer == 1 )
+    {
+        USB.print(F("\n1 - Write succesfull "));
+        SD.showFile(filename);
+    }
+    else
+    {
+       USB.println(F("\n1 - Write failed"));
+    }
+
+ }
 
 uint8_t sendMeasurement(float measure, char descr[], char unit[])
 {

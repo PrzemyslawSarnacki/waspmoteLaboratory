@@ -39,9 +39,11 @@
 #include <stdio.h>
 #include <wiring.h>
 #include <WaspConstants.h>
+#include "WaspAES.h"
+
 
 void setName();
-uint8_t sendMeasurement(float measure, char descr[], char unit[]);
+uint8_t sendEncrypted(float measure, char descr[], char unit[]);
 
 // Auxiliary variable
 uint8_t flag = 0;
@@ -130,14 +132,15 @@ void loop()
           { 
             // 4.4.1 Write the local attribute which is indicated
             flag = BLE.writeLocalAttribute(handler, "Hello World");
+            flag = sendEncrypted(PWR.getBatteryLevel, "Bateria:", "%");
             float bat = PWR.getBatteryLevel();
-            flag = sendMeasurement(bat, "BT:", "%");
+            flag = sendEncrypted(bat, "BT:", "%");
             float temp = Events.getTemperature();
-            flag = sendMeasurement(temp, "TC:", "C");
+            flag = sendEncrypted(temp, "TC:", "C");
             float humd = Events.getHumidity();
-            flag = sendMeasurement(humd, "WP:", "%");
+            flag = sendEncrypted(humd, "WP:", "%");
             float pres = Events.getPressure();
-            flag = sendMeasurement(pres, "CP:", "Pa");
+            flag = sendEncrypted(pres, "CP:", "Pa");
             
             if (flag == 0)
             {
@@ -244,14 +247,28 @@ void setName()
   delay(1000);
 }
 
-uint8_t sendMeasurement(float measure, char descr[], char unit[])
+uint8_t sendEncrypted(float measure, char descr[], char unit[])
 {
   uint16_t handler = 44;
   char buffer1[52];
-  char number3[10];
-  Utils.float2String (measure, number3, 2);
-  USB.println(number3);
-  sprintf(buffer1, "%s%s%s", descr, number3, unit );
-  flag = BLE.writeLocalAttribute(handler, buffer1);
+  char number_var[10];
+  Utils.float2String (measure, number_var, 2);
+  USB.println(number_var);
+  //char data2[] = "Temperatura:";
+  sprintf(buffer1, "%s%s%s", descr, number_var, unit );
+  char password[] = "libeliumlibelium";
+  // Variable for encrypted message's length
+  uint16_t encrypted_length;
+  // Declaration of variable encrypted message
+  uint8_t encrypted_message[300];
+  encrypted_length = AES.sizeOfBlocks(buffer1);
+  AES.encrypt(  AES_128
+                , password
+                , buffer1
+                , encrypted_message
+                , ECB
+                , PKCS5);
+  AES.printMessage(encrypted_message, encrypted_length);
+  flag = BLE.writeLocalAttribute(handler, encrypted_message, encrypted_length);
   return flag;
 }

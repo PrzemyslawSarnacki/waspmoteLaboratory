@@ -67,12 +67,12 @@ void setup()
 void loop()
 {
   // send XBee packet
-  float bat = PWR.getBatteryLevel();
-  char bats[53];
-  Utils.float2String(bat, bats, 2);
-  error = xbeeZB.send( RX_ADDRESS, "Hello");   
-  error = xbeeZB.send( RX_ADDRESS, bats);   
-  error = xbeeZB.send( RX_ADDRESS, WASPMOTE_ID);   
+  // float bat = PWR.getBatteryLevel();
+  // char bats[53];
+  // Utils.float2String(bat, bats, 2);
+  error = xbeeZB.send( RX_ADDRESS, "Hello");
+  // error = xbeeZB.send( RX_ADDRESS, bats);   
+  // error = xbeeZB.send( RX_ADDRESS, WASPMOTE_ID);   
   
   // check TX flag
   if( error == 0 )
