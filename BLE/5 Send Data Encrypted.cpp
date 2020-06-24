@@ -254,7 +254,6 @@ uint8_t sendEncrypted(float measure, char descr[], char unit[])
   char number_var[10];
   Utils.float2String (measure, number_var, 2);
   USB.println(number_var);
-  //char data2[] = "Temperatura:";
   sprintf(buffer1, "%s%s%s", descr, number_var, unit );
   char password[] = "libeliumlibelium";
   // Variable for encrypted message's length
