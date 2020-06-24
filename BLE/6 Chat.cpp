@@ -101,19 +101,20 @@ void loop()
           for (uint8_t a = 1; a <= 100; a++)
           {
             // 4.4.1 Write the local attribute which is indicated
-            char* serialMessage;
+            char* serialMessage = "gituwa";
             serialMessage = readSerial();
             flag = BLE.writeLocalAttribute(handler, serialMessage);
 
-            char message[100];
+            char message[100] = "";
 
             BLE.attributeRead(BLE.connection_handle,   52);
             USB.print(F("Attribute Value (ASCII): "));
             for (uint8_t i = 0; i < BLE.attributeValue[0]; i++)
             {
-              USB.println(BLE.attributeValue[i + 1], DEC);
+              USB.print(BLE.attributeValue[i + 1], DEC);
               message[i] = (BLE.attributeValue[i + 1]);
             }
+            USB.println("\n");
             USB.println(message);
 
 
@@ -235,10 +236,9 @@ char* readSerial() {
     USB.print(val, BYTE);
 
     snprintf(message, sizeof(message), "%s%c", message, val);
-
   }
 
-  USB.print(F("MEssage is: "));
+  USB.print(F("Message is: "));
   USB.print(message);
   return message;
   // Tutaj można wysłać wiadomość (lub zwrócić zmienną i następnie ją zmienić)
